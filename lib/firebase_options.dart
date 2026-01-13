@@ -40,49 +40,59 @@ class DefaultFirebaseOptions {
     }
   }
 
+  // TODO: Replace with your Firebase Web configuration
+  // Run: flutterfire configure --platforms=web
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCKYpMPZGgdMTBbJtqXRQW52Zx5ZtbC54Q',
-    appId: '1:453704785408:web:e658fe845b26cef6d902e5',
-    messagingSenderId: '453704785408',
-    projectId: 'trashpicker-2025',
-    authDomain: 'trashpicker-2025.firebaseapp.com',
-    storageBucket: 'trashpicker-2025.firebasestorage.app',
-    measurementId: 'G-6ETH7G23H8',
+    apiKey: 'YOUR_FIREBASE_WEB_API_KEY',
+    appId: 'YOUR_FIREBASE_WEB_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    authDomain: 'YOUR_FIREBASE_AUTH_DOMAIN',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
+    measurementId: 'YOUR_FIREBASE_MEASUREMENT_ID',
   );
 
+  // TODO: Replace with your Firebase Android configuration
+  // Run: flutterfire configure --platforms=android
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyASRFf5ESygSUznYvqVprn1P5BwmsI2PIE',
-    appId: '1:453704785408:android:7c7370822d5c6fa8d902e5',
-    messagingSenderId: '453704785408',
-    projectId: 'trashpicker-2025',
-    storageBucket: 'trashpicker-2025.firebasestorage.app',
+    apiKey: 'YOUR_FIREBASE_ANDROID_API_KEY',
+    appId: 'YOUR_FIREBASE_ANDROID_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
   );
 
+  // TODO: Replace with your Firebase iOS configuration
+  // Run: flutterfire configure --platforms=ios
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAwB_3hRZCv2ivuj_KCfG49NRIcPF0q4Ys',
-    appId: '1:453704785408:ios:e9238f72a88f8155d902e5',
-    messagingSenderId: '453704785408',
-    projectId: 'trashpicker-2025',
-    storageBucket: 'trashpicker-2025.firebasestorage.app',
+    apiKey: 'YOUR_FIREBASE_IOS_API_KEY',
+    appId: 'YOUR_FIREBASE_IOS_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
     iosBundleId: 'com.example.trashpicker',
   );
 
+  // TODO: Replace with your Firebase macOS configuration
+  // Run: flutterfire configure --platforms=macos
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAwB_3hRZCv2ivuj_KCfG49NRIcPF0q4Ys',
-    appId: '1:453704785408:ios:e9238f72a88f8155d902e5',
-    messagingSenderId: '453704785408',
-    projectId: 'trashpicker-2025',
-    storageBucket: 'trashpicker-2025.firebasestorage.app',
+    apiKey: 'YOUR_FIREBASE_MACOS_API_KEY',
+    appId: 'YOUR_FIREBASE_MACOS_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
     iosBundleId: 'com.example.trashpicker',
   );
 
+  // TODO: Replace with your Firebase Windows configuration
+  // Run: flutterfire configure --platforms=windows
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCKYpMPZGgdMTBbJtqXRQW52Zx5ZtbC54Q',
-    appId: '1:453704785408:web:fc8cb51a39db2ec3d902e5',
-    messagingSenderId: '453704785408',
-    projectId: 'trashpicker-2025',
-    authDomain: 'trashpicker-2025.firebaseapp.com',
-    storageBucket: 'trashpicker-2025.firebasestorage.app',
-    measurementId: 'G-FDLMFSKN5M',
+    apiKey: 'YOUR_FIREBASE_WINDOWS_API_KEY',
+    appId: 'YOUR_FIREBASE_WINDOWS_APP_ID',
+    messagingSenderId: 'YOUR_FIREBASE_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_FIREBASE_PROJECT_ID',
+    authDomain: 'YOUR_FIREBASE_AUTH_DOMAIN',
+    storageBucket: 'YOUR_FIREBASE_STORAGE_BUCKET',
+    measurementId: 'YOUR_FIREBASE_MEASUREMENT_ID',
   );
 }

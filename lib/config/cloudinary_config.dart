@@ -12,7 +12,7 @@ class CloudinaryConfig {
   /// 3. Copiez la valeur "Cloud Name" affichée en haut
   ///
   /// Exemple: 'mon-cloud-name'
-  static const String cloudName = 'dhcpkhuao';
+  static const String cloudName = 'YOUR_CLOUD_NAME_HERE';
 
   /// ⚠️ REMPLACER CETTE VALEUR PAR VOTRE UPLOAD PRESET CLOUDINARY
   ///
@@ -28,7 +28,7 @@ class CloudinaryConfig {
   /// 6. Sauvegardez et copiez le nom du preset
   ///
   /// Exemple: 'trashpicker_preset'
-  static const String uploadPreset = 'trashpicker_preset';
+  static const String uploadPreset = 'YOUR_UPLOAD_PRESET_HERE';
 
   /// Dossier où les images seront stockées dans Cloudinary
   /// Vous pouvez changer cette valeur selon vos besoins
