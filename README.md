@@ -1,6 +1,6 @@
 # TrashPick
 
-![TrashPick Logo](./logo-trash-pick-transparent.png)
+<img src="./logo-trash-pick-transparent.png" alt="TrashPick Logo" width="200">
 
 ## The Problem
 
@@ -14,7 +14,7 @@ It's just an inefficiency waiting to be solved.
 
 **TrashPick** is a mobile app that connects households with waste pickers in real time. Instead of hoping someone shows up, households request a pickup. Instead of guessing demand, pickers know exactly where they're needed. Simple.
 
-![Starting Screen](./starting.png) ![Sign Up or In](./sign-up-or-in.png) ![Sign In](./sign-in.png)
+<img src="./starting.png" alt="Starting Screen" width="250"> <img src="./sign-up-or-in.png" alt="Sign Up or In" width="250"> <img src="./sign-in.png" alt="Sign In" width="250">
 
 ### How It Works
 
