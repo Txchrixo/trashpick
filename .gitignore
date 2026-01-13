@@ -43,3 +43,20 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Sensitive files and API keys
+*.input
+*claude*
+*temp*
+GOOGLE_MAPS_API_KEY.txt
+.env
+.env.local
+.env.*.local
+
+# Firebase config (should use environment variables)
+# Keep firebase_options.dart but be careful with API keys
+# android/app/google-services.json (keep for build, but consider using CI/CD secrets)
+# Note: google-services.json.example is committed as a template
+
+# Cloudinary config (contains API keys)
+# lib/config/cloudinary_config.dart (keep but use environment variables in production)
