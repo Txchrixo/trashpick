@@ -1,82 +1,94 @@
-# TrashPicker
+# TrashPick
 
-Application mobile de gestion de collecte de déchets développée avec Flutter.
+![TrashPick Logo](./logo-trash-pick-transparent.png)
 
-## Configuration Google Maps API
+## The Problem
 
-Pour utiliser Google Maps dans cette application, vous devez obtenir une clé API Google Maps et la configurer dans les fichiers suivants :
+In my neighborhood, I noticed waste pickers go door-to-door collecting trash from households. It's simple work, but it's chaotic. Households don't know when the picker will come. Pickers don't know which houses want their service today. There's no coordination, no way to pay reliably, no way to track who's picking up what.
 
-### 1. Obtenir une clé API Google Maps
+It's just an inefficiency waiting to be solved.
 
-1. Allez sur [Google Cloud Console](https://console.cloud.google.com/)
-2. Créez un nouveau projet ou sélectionnez un projet existant
-3. Activez les APIs suivantes :
-   - Maps SDK for Android
-   - Maps SDK for iOS
-   - Maps JavaScript API (pour Web)
-4. Créez une clé API dans "APIs & Services" > "Credentials"
+---
 
-### 2. Configurer la clé API
+## The Solution
 
-Remplacez `YOUR_GOOGLE_MAPS_API_KEY` dans les fichiers suivants par votre vraie clé API :
+**TrashPick** is a mobile app that connects households with waste pickers in real time. Instead of hoping someone shows up, households request a pickup. Instead of guessing demand, pickers know exactly where they're needed. Simple.
 
-#### Android
-- Fichier : `android/app/src/main/AndroidManifest.xml`
-- Ligne 18 : `android:value="YOUR_GOOGLE_MAPS_API_KEY"`
+![Starting Screen](./starting.png) ![Sign Up or In](./sign-up-or-in.png) ![Sign In](./sign-in.png)
 
-#### iOS
-- Fichier : `ios/Runner/AppDelegate.swift`
-- Ligne 12 : `GMSServices.provideAPIKey("YOUR_GOOGLE_MAPS_API_KEY")`
+### How It Works
 
-#### Web
-- Fichier : `web/index.html`
-- Ligne 36 : `<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>`
+**For Households:**
+- Request a waste pickup in a few taps through a mobile app
+- Choose a convenient time and location
+- Track your picker in real time
+- Pay securely through the app
+- Schedule recurring pickups if you prefer
 
-### 3. Configuration Firebase
+**For Pickers:**
+- Receive pickup requests directly on your phone
+- Know exactly where to go and when
+- Build a customer base
+- Get paid reliably through the app
+- Track your earnings
 
-L'application utilise Firebase pour l'authentification et le stockage. Assurez-vous de :
+**For Admins:**
+- Monitor the network in real time
+- See where demand is highest
+- Manage pickers and households
+- Track payments and performance
+- Identify patterns to grow the service
 
-1. Créer un projet Firebase sur [Firebase Console](https://console.firebase.google.com/)
-2. Ajouter les applications Android, iOS et Web à votre projet Firebase
-3. Télécharger les fichiers de configuration :
-   - `google-services.json` pour Android (placez-le dans `android/app/`)
-   - `GoogleService-Info.plist` pour iOS (placez-le dans `ios/Runner/`)
-   - Configuration Web (déjà dans `lib/firebase_options.dart`)
+---
 
-## Installation
+## Key Features
 
-1. Clonez le repository
-2. Installez les dépendances :
+
+- **Real-time Request & Dispatch** - Households request; pickers accept instantly
+- **GPS Tracking** - Know where your picker is
+- **Flexible Scheduling** - One-time or recurring pickups
+- **Secure Payments** - In-app payments, transparent pricing
+- **Picker Analytics** - Earnings tracking, customer ratings
+- **Admin Dashboard** - Real-time network monitoring
+- **Reputation System** - Ratings reward reliable service
+
+---
+
+## Technical Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Flutter (iOS/Android/Web) |
+| **Backend** | Firebase (Auth, Firestore) |
+| **Database** | Firebase Firestore |
+| **State Management** | GetX |
+| **Maps & Geolocation** | flutter_map (OpenStreetMap) + Geolocator |
+| **Image Storage** | Cloudinary |
+| **Real-time Communication** | Firebase Firestore |
+
+---
+
+## Getting Started
+
+### For Contributors
+
 ```bash
+git clone https://github.com/yourusername/trashpick.git
+cd trashpick
 flutter pub get
-```
-
-3. Configurez les clés API comme décrit ci-dessus
-
-4. Lancez l'application :
-```bash
 flutter run
 ```
 
-## Fonctionnalités
+### For Feedback
 
-### Client
-- Création de demandes de récupération de déchets
-- Ajout de photos et notes pour les demandes
-- Suivi en temps réel du statut de la demande
-- Visualisation sur carte de la position
+Have thoughts? Found a bug? [Open an issue](https://github.com/txchrixo/trashpick/issues) or reach out.
 
-### Picker (Collecteur)
-- Liste des demandes de récupération en attente
-- Vue carte avec tous les points de collecte
-- Acceptation et gestion des demandes
-- Navigation vers les points de collecte
+---
 
-## Technologies utilisées
+## License
 
-- Flutter
-- Firebase (Auth, Firestore, Storage)
-- Google Maps
-- GetX (State Management)
-- Geolocator
-- Image Picker
+TrashPick is open source under the MIT License. See [LICENSE](./LICENSE) for details.
+
+---
+
+**TrashPick: A simple app solving a simple problem.**
