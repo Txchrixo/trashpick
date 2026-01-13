@@ -1,0 +1,36 @@
+=============================================================
+IMPORTANT : Configuration de la clé API Google Maps
+=============================================================
+
+Cette application nécessite une clé API Google Maps pour fonctionner.
+
+ÉTAPES À SUIVRE :
+-----------------
+
+1. Obtenez votre clé API sur : https://console.cloud.google.com/
+
+2. Activez les APIs suivantes dans votre projet Google Cloud :
+   - Maps SDK for Android
+   - Maps SDK for iOS
+   - Maps JavaScript API
+
+3. Remplacez "YOUR_GOOGLE_MAPS_API_KEY" par votre vraie clé dans :
+
+   📱 ANDROID
+   Fichier : android/app/src/main/AndroidManifest.xml
+   Ligne : <meta-data android:name="com.google.android.geo.API_KEY" android:value="YOUR_GOOGLE_MAPS_API_KEY"/>
+
+   🍎 iOS
+   Fichier : ios/Runner/AppDelegate.swift
+   Ligne : GMSServices.provideAPIKey("YOUR_GOOGLE_MAPS_API_KEY")
+
+   🌐 WEB
+   Fichier : web/index.html
+   Ligne : <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+
+4. SÉCURITÉ :
+   - Ne commitez JAMAIS votre vraie clé API dans un repository public
+   - Ajoutez des restrictions à votre clé API dans Google Cloud Console
+   - Utilisez des clés différentes pour dev/prod
+
+=============================================================

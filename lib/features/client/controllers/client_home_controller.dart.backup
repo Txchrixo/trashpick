@@ -1,0 +1,270 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../../models/app_user.dart';
+import '../../../models/trash_report.dart';
+import '../../../services/auth_service.dart';
+import '../../../services/firestore_service.dart';
+import '../../../services/location_service.dart';
+import '../../../services/storage_service.dart';
+import '../../../core/app_colors.dart';
+
+class ClientHomeController extends GetxController {
+  final AuthService _authService = Get.find<AuthService>();
+  final FirestoreService _firestoreService = FirestoreService();
+  final LocationService _locationService = LocationService();
+  final StorageService _storageService = StorageService();
+  final ImagePicker _imagePicker = ImagePicker();
+
+  final Rx<AppUser?> currentUser = Rx<AppUser?>(null);
+  final Rx<TrashReport?> activeTrashReport = Rx<TrashReport?>(null);
+  final RxBool isTrashToggleOn = false.obs;
+  final RxBool isLoading = false.obs;
+  final RxString clientNotes = ''.obs;
+  final RxList<String> uploadedPhotos = <String>[].obs;
+  final RxString statusMessage = 'Pas de demande active'.obs;
+
+  final TextEditingController notesController = TextEditingController();
+
+  GoogleMapController? mapController;
+  LatLng? userLocation;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadUserData();
+    _listenToActiveTrashReport();
+  }
+
+  @override
+  void onClose() {
+    notesController.dispose();
+    super.onClose();
+  }
+
+  Future<void> _loadUserData() async {
+    final userId = _authService.userId;
+    if (userId != null) {
+      _firestoreService.listenToUser(userId).listen((user) {
+        currentUser.value = user;
+        if (user != null && user.latitude != null && user.longitude != null) {
+          userLocation = LatLng(user.latitude!, user.longitude!);
+          _moveCamera();
+        }
+      });
+    }
+  }
+
+  void _listenToActiveTrashReport() {
+    final userId = _authService.userId;
+    if (userId != null) {
+      _firestoreService.listenToClientTrashReports(userId).listen((reports) {
+        final pending = reports.where((r) =>
+            r.status == TrashStatus.pending || r.status == TrashStatus.inTransit);
+        if (pending.isNotEmpty) {
+          activeTrashReport.value = pending.first;
+          isTrashToggleOn.value = true;
+          clientNotes.value = pending.first.clientNotes ?? '';
+          notesController.text = clientNotes.value;
+          uploadedPhotos.value = List.from(pending.first.photosUrls);
+          _updateStatusMessage(pending.first.status);
+        } else {
+          activeTrashReport.value = null;
+          isTrashToggleOn.value = false;
+          clientNotes.value = '';
+          notesController.text = '';
+          uploadedPhotos.clear();
+          statusMessage.value = 'Pas de demande active';
+        }
+      });
+    }
+  }
+
+  void _updateStatusMessage(TrashStatus status) {
+    switch (status) {
+      case TrashStatus.pending:
+        statusMessage.value = 'En attente de récupération...';
+        break;
+      case TrashStatus.inTransit:
+        statusMessage.value = 'Picker en route 🚚';
+        break;
+      case TrashStatus.completed:
+        statusMessage.value = 'Récupéré ✓';
+        break;
+      case TrashStatus.cancelled:
+        statusMessage.value = 'Annulé';
+        break;
+    }
+  }
+
+  void _moveCamera() {
+    if (mapController != null && userLocation != null) {
+      mapController!.animateCamera(
+        CameraUpdate.newLatLngZoom(userLocation!, 15),
+      );
+    }
+  }
+
+  void onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    _moveCamera();
+  }
+
+  Future<void> toggleTrashRequest() async {
+    if (isLoading.value) return;
+
+    if (isTrashToggleOn.value) {
+      await _turnOffTrashRequest();
+    } else {
+      await _turnOnTrashRequest();
+    }
+  }
+
+  Future<void> _turnOnTrashRequest() async {
+    isLoading.value = true;
+
+    try {
+      final user = currentUser.value;
+      if (user == null) {
+        Get.snackbar('Erreur', 'Utilisateur non trouvé');
+        return;
+      }
+
+      final position = await _locationService.getCurrentPosition();
+      final lat = position?.latitude ?? user.latitude ?? 0.0;
+      final lng = position?.longitude ?? user.longitude ?? 0.0;
+
+      final report = TrashReport(
+        id: '',
+        clientId: user.id,
+        latitude: lat,
+        longitude: lng,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        status: TrashStatus.pending,
+        clientNotes: clientNotes.value.isEmpty ? null : clientNotes.value,
+        photosUrls: uploadedPhotos.toList(),
+        quartier: user.quartier,
+      );
+
+      await _firestoreService.createTrashReport(report);
+      isTrashToggleOn.value = true;
+      statusMessage.value = 'En attente de récupération...';
+
+      Get.snackbar(
+        'Succès',
+        'Demande de récupération créée',
+        backgroundColor: AppColors.success,
+        colorText: AppColors.textWhite,
+      );
+    } catch (e) {
+      Get.snackbar('Erreur', e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> _turnOffTrashRequest() async {
+    isLoading.value = true;
+
+    try {
+      final report = activeTrashReport.value;
+      if (report == null) {
+        isTrashToggleOn.value = false;
+        return;
+      }
+
+      if (report.status == TrashStatus.completed) {
+        isTrashToggleOn.value = false;
+        statusMessage.value = 'Récupéré ✓';
+      } else {
+        await _firestoreService.cancelTrashReport(report.id);
+        isTrashToggleOn.value = false;
+        statusMessage.value = 'Demande annulée';
+      }
+    } catch (e) {
+      Get.snackbar('Erreur', e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> pickAndUploadImages() async {
+    if (activeTrashReport.value == null) {
+      Get.snackbar('Erreur', 'Créez d\'abord une demande de récupération');
+      return;
+    }
+
+    try {
+      final List<XFile> images = await _imagePicker.pickMultiImage();
+
+      if (images.isEmpty) return;
+
+      isLoading.value = true;
+
+      final reportId = activeTrashReport.value!.id;
+      final List<String> newUrls = [];
+
+      for (final image in images) {
+        final url = await _storageService.uploadTrashImage(
+          File(image.path),
+          reportId,
+        );
+        if (url != null) {
+          newUrls.add(url);
+        }
+      }
+
+      if (newUrls.isNotEmpty) {
+        uploadedPhotos.addAll(newUrls);
+        await _firestoreService.updateTrashReport(reportId, {
+          'photosUrls': uploadedPhotos.toList(),
+        });
+
+        Get.snackbar(
+          'Succès',
+          '${newUrls.length} photo(s) ajoutée(s)',
+          backgroundColor: AppColors.success,
+          colorText: AppColors.textWhite,
+        );
+      }
+    } catch (e) {
+      Get.snackbar('Erreur', e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> updateNotes(String notes) async {
+    clientNotes.value = notes;
+
+    final report = activeTrashReport.value;
+    if (report != null) {
+      await _firestoreService.updateTrashReport(report.id, {
+        'clientNotes': notes.isEmpty ? null : notes,
+      });
+    }
+  }
+
+  Set<Marker> getMarkers() {
+    final markers = <Marker>{};
+
+    if (userLocation != null) {
+      markers.add(
+        Marker(
+          markerId: const MarkerId('user_location'),
+          position: userLocation!,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          infoWindow: InfoWindow(
+            title: currentUser.value?.name ?? 'Ma position',
+            snippet: currentUser.value?.address ?? '',
+          ),
+        ),
+      );
+    }
+
+    return markers;
+  }
+}

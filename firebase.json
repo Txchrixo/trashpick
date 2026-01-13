@@ -1,0 +1,28 @@
+{
+  "firestore": {
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "trashpicker-2025",
+          "appId": "1:453704785408:android:7c7370822d5c6fa8d902e5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "trashpicker-2025",
+          "configurations": {
+            "android": "1:453704785408:android:7c7370822d5c6fa8d902e5",
+            "ios": "1:453704785408:ios:e9238f72a88f8155d902e5",
+            "macos": "1:453704785408:ios:e9238f72a88f8155d902e5",
+            "web": "1:453704785408:web:e658fe845b26cef6d902e5",
+            "windows": "1:453704785408:web:fc8cb51a39db2ec3d902e5"
+          }
+        }
+      }
+    }
+  }
+}

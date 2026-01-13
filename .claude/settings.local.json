@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if not exist \"c:\\\\Users\\\\Chris Nana\\\\Desktop\\\\@Work\\\\trashpicker\\\\trashpicker\\\\lib\\\\core\" mkdir \"c:\\\\Users\\\\Chris Nana\\\\Desktop\\\\@Work\\\\trashpicker\\\\trashpicker\\\\lib\\\\core\")",
+      "Bash(flutter clean:*)",
+      "Bash(mkdir:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter run:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(grep:*)",
+      "Bash(if not exist \"c:\\\\Users\\\\Chris Nana\\\\Desktop\\\\@Work\\\\trashpicker\\\\trashpicker\\\\lib\\\\features\\\\admin\\\\controllers\" mkdir \"c:\\\\Users\\\\Chris Nana\\\\Desktop\\\\@Work\\\\trashpicker\\\\trashpicker\\\\lib\\\\features\\\\admin\\\\controllers\")",
+      "Bash(if not exist \"assets\\\\images\" mkdir \"assets\\\\images\")",
+      "Bash(firebase deploy:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)"
+    ]
+  }
+}

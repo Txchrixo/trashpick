@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && getUserRole() == 'admin';
+    }
+
+    function isPicker() {
+      return isAuthenticated() && getUserRole() == 'picker';
+    }
+
+    function isClient() {
+      return isAuthenticated() && getUserRole() == 'client';
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Lecture: Tous les users authentifiés peuvent lire tous les profils
+      allow read: if isAuthenticated();
+
+      // Création: Seulement lors du signup (nouveau user créant son propre profil)
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == userId &&
+                       request.resource.data.role == 'client';
+
+      // Mise à jour:
+      // - Un user peut modifier son propre profil (sauf le rôle)
+      // - Un admin peut tout modifier (y compris créer des pickers)
+      allow update: if (isOwner(userId) &&
+                        request.resource.data.role == resource.data.role) ||
+                       isAdmin();
+
+      // Suppression: Seulement les admins
+      allow delete: if isAdmin();
+    }
+
+    // Trash Reports collection
+    match /trash_reports/{reportId} {
+      // Lecture:
+      // - Admins peuvent tout lire
+      // - Pickers peuvent lire les demandes pending/inTransit
+      // - Clients peuvent lire leurs propres demandes
+      allow read: if isAdmin() ||
+                     isPicker() ||
+                     (isClient() && resource.data.clientId == request.auth.uid);
+
+      // Création: Seulement les clients pour leurs propres demandes
+      allow create: if isClient() &&
+                       request.resource.data.clientId == request.auth.uid &&
+                       request.resource.data.status == 'pending';
+
+      // Mise à jour:
+      // - Clients peuvent mettre à jour leurs propres demandes (notes, photos, annulation)
+      // - Pickers peuvent assigner/compléter des demandes
+      // - Admins peuvent tout faire
+      allow update: if (isClient() && resource.data.clientId == request.auth.uid) ||
+                       isPicker() ||
+                       isAdmin();
+
+      // Suppression: Seulement les admins
+      allow delete: if isAdmin();
+    }
+  }
+}
